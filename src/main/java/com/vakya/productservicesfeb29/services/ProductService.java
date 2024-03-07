@@ -16,7 +16,7 @@ public interface ProductService {
                             double price,
                             String image
     );
-    //Object getAllProduct();
+    //Object g
 
     Product updateProduct(String title, String description, String category, double price, String image) throws URISyntaxException;
 
