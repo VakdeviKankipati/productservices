@@ -1,12 +1,15 @@
 package com.vakya.productservicesfeb29.services;
 
 import com.vakya.productservicesfeb29.dtos.FakeStoreProductsDto;
+import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService{
@@ -22,17 +25,32 @@ public class FakeStoreProductService implements ProductService{
         this.restTemplate = restTemplate;
     }
     @Override
-    public Product getSingleProduct(Long productId) {
-        FakeStoreProductsDto fakeStoreProduct = restTemplate.getForObject(
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
+        ResponseEntity<FakeStoreProductsDto> fakeStoreProductResponse = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreProductsDto.class
                 );
+        FakeStoreProductsDto fakeStoreProduct = fakeStoreProductResponse.getBody();
+
+        if (fakeStoreProduct == null) {
+            throw new ProductNotFoundException("Product with id: " + productId + " doesn't exist. Retry some other product.");
+        }
         return fakeStoreProduct.toProduct();
     }
 
     @Override
-    public List<Product> getProduct() {
-        return null;
+    public List<Product> getProducts() {
+        FakeStoreProductsDto[] fakeStoreProducts =
+                restTemplate.getForObject(
+                        "https://fakestoreapi.com/products",
+                        FakeStoreProductsDto[].class
+                );
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductsDto fakeStoreProduct  : fakeStoreProducts){
+            products.add(fakeStoreProduct.toProduct());
+        }
+        return  products;
+
     }
 
     @Override
@@ -60,7 +78,7 @@ public class FakeStoreProductService implements ProductService{
         return response.toProduct();
     }
 
-    @Override
+   /* @Override
     public Object getAllProduct() {
        Object fake = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
@@ -69,7 +87,7 @@ public class FakeStoreProductService implements ProductService{
         );
 
        return fake;
-    }
+    }*/
 
     @Override
     public Product updateProduct(String title, String description, String category, double price, String image) throws URISyntaxException {

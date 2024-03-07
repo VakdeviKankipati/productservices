@@ -2,10 +2,13 @@ package com.vakya.productservicesfeb29.controllers;
 
 import com.vakya.productservicesfeb29.dtos.CreateProductRequestDto;
 import com.vakya.productservicesfeb29.dtos.DeleteProductDto;
-import com.vakya.productservicesfeb29.dtos.GetAllProductDto;
+import com.vakya.productservicesfeb29.dtos.ErrorDto;
 import com.vakya.productservicesfeb29.dtos.UpdateProductRequestDto;
+import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
 import com.vakya.productservicesfeb29.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,16 +38,16 @@ public class ProductController {
 
 
     @GetMapping("/products/{id}")
-    public Product getProductDetails(@PathVariable("id") Long productsId){
+    public Product getProductDetails(@PathVariable("id") Long productsId) throws ProductNotFoundException {
 
         return productService.getSingleProduct(productsId);
     }
 
 
-    /*@GetMapping("/products")
-    public void getAllProduct(){
-
-    }*/
+    @GetMapping("/products")
+    public List<Product> getAllProducts(){
+        return productService.getProducts();
+    }
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequestDto updateDto) throws URISyntaxException {
         return productService.updateProduct(
@@ -57,11 +60,11 @@ public class ProductController {
 
     }
 
-    @GetMapping("products")
-    public Object getAllProducts() {
+  /*  @GetMapping("products")
+    public Object getAllProduct() {
         //return productService.getAllProducts();
         return productService.getAllProduct();
-    }
+    }*/
 
     @GetMapping("/products/categories")
     public Object getAllCategories(){
