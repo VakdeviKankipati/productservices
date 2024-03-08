@@ -7,6 +7,7 @@ import com.vakya.productservicesfeb29.dtos.UpdateProductRequestDto;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
 import com.vakya.productservicesfeb29.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProductController {
     private ProductService productService;
     private RestTemplate restTemplate;
 
-    public ProductController(ProductService productService){
+    public ProductController(@Qualifier("selfProductService") ProductService productService){
         this.productService = productService;
     }
 
