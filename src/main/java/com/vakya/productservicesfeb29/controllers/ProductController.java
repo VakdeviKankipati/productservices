@@ -82,7 +82,8 @@ public class ProductController {
    /* @GetMapping("/products/category/category")
     public Object getSpecificCategorys(@PathVariable("category") String category){
         return  productService.getSpecificCategorys(category);
-    }*/
+    }
+    */
     @GetMapping("/products/category/{category}")
     public  List<Product> getProducts(@PathVariable("category") String category) throws  ProductNotFoundException{
         return  productService.getProducts(category);

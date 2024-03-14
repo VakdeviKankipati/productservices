@@ -89,7 +89,8 @@ public class SelfProductService implements ProductService {
         Category cat = categoryRepository.findByTitle(category);
         return  productRepository.findByCategory(cat);
       //  return productRepository.findByCategory_Title(String.valueOf(cat));
-    }*/
+    }
+    */
 
 
     @Override
