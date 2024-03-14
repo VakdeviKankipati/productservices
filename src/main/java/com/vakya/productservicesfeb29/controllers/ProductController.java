@@ -47,7 +47,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<Product> getAllProducts(){
-        return productService.getProducts();
+        return productService.getAllProducts();
     }
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable("id") Long productId, @RequestBody UpdateProductRequestDto updateDto) throws URISyntaxException, ProductNotFoundException{
@@ -79,14 +79,14 @@ public class ProductController {
         return productService.deleteProducts(productId);
     }
 
-    @GetMapping("/products/category/category")
+   /* @GetMapping("/products/category/category")
     public Object getSpecificCategorys(@PathVariable("category") String category){
         return  productService.getSpecificCategorys(category);
-    }
-   /* @GetMapping("/products/category/{category}")
-    public  List<Product> getProducts(@PathVariable("category") String category){
-        return  productService.getProducts(category);
     }*/
+    @GetMapping("/products/category/{category}")
+    public  List<Product> getProducts(@PathVariable("category") String category) throws  ProductNotFoundException{
+        return  productService.getProducts(category);
+    }
 
 
 }

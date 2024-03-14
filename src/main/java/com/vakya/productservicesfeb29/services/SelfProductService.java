@@ -23,7 +23,7 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
 
         return productRepository.findAll();
     }
@@ -84,19 +84,19 @@ public class SelfProductService implements ProductService {
         return p;
     }
 
-    @Override
+   /* @Override
     public Object getSpecificCategorys(String category) {
         Category cat = categoryRepository.findByTitle(category);
         return  productRepository.findByCategory(cat);
       //  return productRepository.findByCategory_Title(String.valueOf(cat));
-    }
-
-
-   /* @Override
-    public List<Product> getProducts(String category) {
-        Category cat = categoryRepository.findByTitle(category);
-        return null;
     }*/
+
+
+    @Override
+    public List<Product> getProducts(String category) throws ProductNotFoundException {
+        Category cat = categoryRepository.findByTitle(category);
+        return  productRepository.findByCategory(cat);
+    }
 
 
 }

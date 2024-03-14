@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
+
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
 
@@ -39,7 +41,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
         FakeStoreProductsDto[] fakeStoreProducts =
                 restTemplate.getForObject(
                         "https://fakestoreapi.com/products",
@@ -130,20 +132,24 @@ public class FakeStoreProductService implements ProductService{
         return p;
     }
 
-   /* @Override
-    public List<Product> getProducts(String category) {
-        List<Product> productList = new ArrayList<>();
-       // List<LinkedHashMap<String, String>> linkedHashMaps = restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category,
-       //         List.class);
+    @Override
+    public List<Product> getProducts(String category) throws ProductNotFoundException {
+        List<Product> answer = new ArrayList<>();
+        //List<LinkedHashMap<String, String>> linkedHashMaps = restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category,
+        //        List.class);
+
         FakeStoreProductsDto[] dtos = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/category/"+category,
                 FakeStoreProductsDto[].class
         ).getBody();
-        for (FakeStoreProductsDto fake: dtos){
-
+        for (FakeStoreProductsDto fake: dtos) {
+            answer.add(fake.toProduct());
         }
-        return null;
-    }*/
+        if(answer.isEmpty()){
+            throw new ProductNotFoundException("No Product : "+category +" is present");
+        }
+        return answer;
+    }
 
 
 
@@ -168,14 +174,14 @@ public class FakeStoreProductService implements ProductService{
 
 
 
-    @Override
+   /* @Override
     public Object getSpecificCategorys(String category) {
         Object ob = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/category/jewelery",
                 Object.class
         );
         return ob;
-    }
+    }*/
 
 
 

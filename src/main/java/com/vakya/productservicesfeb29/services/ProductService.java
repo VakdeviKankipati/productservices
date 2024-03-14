@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductService {
     Product getSingleProduct(Long productId) throws ProductNotFoundException;
-    List<Product> getProducts();
+    List<Product> getAllProducts();
 
     Product createProduct(  String title,
                             String description,
@@ -25,8 +25,8 @@ public interface ProductService {
     Product deleteProducts(Long productId) throws  ProductNotFoundException;
 
 
-    Object getSpecificCategorys(String category);
-    //List<Product> getProducts(String category);
+    //Object getSpecificCategorys(String category);
+    List<Product> getProducts(String category) throws ProductNotFoundException;
 
 
 }
