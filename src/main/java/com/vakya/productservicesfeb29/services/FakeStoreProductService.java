@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
 
@@ -90,14 +90,14 @@ public class FakeStoreProductService implements ProductService{
     }*/
 
     @Override
-    public Product updateProduct(String title, String description, String category, double price, String image) throws URISyntaxException {
+    public Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws ProductNotFoundException, URISyntaxException {
         FakeStoreProductsDto fakeStore = new FakeStoreProductsDto();
-       // fakeStore.setId(7);
+        fakeStore.setId(productId);
         fakeStore.setTitle(title);
-        fakeStore.setCategory(category);
+        fakeStore.setDescription(description);
         fakeStore.setPrice(price);
         fakeStore.setImage(image);
-        fakeStore.setDescription(description);
+        fakeStore.setCategory(category);
         URI uri = new URI("https://fakestoreapi.com/products/7");
        // FakeStoreProductsDto response =
         restTemplate.put(
@@ -122,7 +122,33 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product deleteProduct(String title, String description, String category, double price, String image) {
+    public Product deleteProducts(Long productId) throws  ProductNotFoundException {
+        Map<String,String> mp = new HashMap<>();
+        mp.put("id", productId.toString());
+        Product p = getSingleProduct(productId);
+        restTemplate.delete("https://fakestoreapi.com/products/" + productId,mp);
+        return p;
+    }
+
+   /* @Override
+    public List<Product> getProducts(String category) {
+        List<Product> productList = new ArrayList<>();
+       // List<LinkedHashMap<String, String>> linkedHashMaps = restTemplate.getForObject("https://fakestoreapi.com/products/category/"+category,
+       //         List.class);
+        FakeStoreProductsDto[] dtos = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/category/"+category,
+                FakeStoreProductsDto[].class
+        ).getBody();
+        for (FakeStoreProductsDto fake: dtos){
+
+        }
+        return null;
+    }*/
+
+
+
+   /* @Override
+  /*  public Product deleteProducts(String title, String description, String category, double price, String image) {
         FakeStoreProductsDto dto = new FakeStoreProductsDto();
         //dto.setId(id);
         dto.setImage(image);
@@ -136,24 +162,23 @@ public class FakeStoreProductService implements ProductService{
                 dto,
                 FakeStoreProductsDto.class
         );
-       /* FakeStoreProductsDto storeProductsDto = restTemplate.delete(
-                "https://fakestoreapi.com/products/6",
-                dto,
-                FakeStoreProductsDto.class
-
-        );*/
 
         return dto.toProduct();
-    }
+    }*/
+
+
 
     @Override
-    public Object getSpecificCategory() {
+    public Object getSpecificCategorys(String category) {
         Object ob = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/category/jewelery",
                 Object.class
         );
         return ob;
     }
+
+
+
 
 
 }

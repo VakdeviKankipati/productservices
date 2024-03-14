@@ -19,12 +19,13 @@ public class SelfProductService implements ProductService {
     }
     @Override
     public Product getSingleProduct(Long productId) throws ProductNotFoundException {
-        return null;
+        return productRepository.findByIdIs(productId);
     }
 
     @Override
     public List<Product> getProducts() {
-        return null;
+
+        return productRepository.findAll();
     }
 
     @Override
@@ -34,8 +35,6 @@ public class SelfProductService implements ProductService {
         product.setDescription(description);
         product.setPrice(price);
         product.setImageUrl(image);
-
-        //Category category1 = categoryRepository.findByTitle(category);
         Category category1 = (Category) categoryRepository.findByTitle(category);
 
         if(category1 == null){
@@ -43,27 +42,61 @@ public class SelfProductService implements ProductService {
             category1.setTitle(title);
         }
         product.setCategory(category1);
-        Product saveProduct = productRepository.save(product);
-        return saveProduct;
+
+
+        return productRepository.save(product);
     }
 
     @Override
-    public Product updateProduct(String title, String description, String category, double price, String image) throws URISyntaxException {
-        return null;
+    public Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws  ProductNotFoundException, URISyntaxException {
+        Product product = getSingleProduct(productId);
+        if(title !=null) {
+            product.setTitle(title);
+        }
+        if(description != null){
+            product.setDescription(description);
+        }
+        if(price != 0.0){
+            product.setPrice(price);
+        }
+        if(image != null){
+            product.setImageUrl(image);
+        }
+        if(category != null) {
+            Category cat = new Category();
+            cat.setTitle((product.getCategory().getTitle()));
+            product.setCategory(cat);
+        }
+        productRepository.save(product);
+        return product;
     }
 
     @Override
     public Object getAllCategories() {
-        return null;
+
+        return categoryRepository.findAll();
     }
 
     @Override
-    public Product deleteProduct(String title, String description, String category, double price, String image) {
-        return null;
+    public Product deleteProducts(Long productId) throws ProductNotFoundException {
+        Product p = getSingleProduct(productId);
+        productRepository.delete(p);
+        return p;
     }
 
     @Override
-    public Object getSpecificCategory() {
-        return null;
+    public Object getSpecificCategorys(String category) {
+        Category cat = categoryRepository.findByTitle(category);
+        return  productRepository.findByCategory(cat);
+      //  return productRepository.findByCategory_Title(String.valueOf(cat));
     }
+
+
+   /* @Override
+    public List<Product> getProducts(String category) {
+        Category cat = categoryRepository.findByTitle(category);
+        return null;
+    }*/
+
+
 }

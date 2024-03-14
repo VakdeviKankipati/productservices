@@ -50,8 +50,9 @@ public class ProductController {
         return productService.getProducts();
     }
     @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequestDto updateDto) throws URISyntaxException {
-        return productService.updateProduct(
+    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody UpdateProductRequestDto updateDto) throws URISyntaxException, ProductNotFoundException{
+        return productService.updateProduct(productId,
+               // updateDto.getId(),
                 updateDto.getTitle(),
                 updateDto.getDescription(),
                 updateDto.getCategory(),
@@ -73,19 +74,19 @@ public class ProductController {
         return productService.getAllCategories();
     }
 
-    @DeleteMapping("/products/{id}")
-    public Product deleteProduct(@PathVariable Long id, @RequestBody DeleteProductDto deleteDto){
-        return productService.deleteProduct(
-                //deleteDto.getId(),
-                deleteDto.getDescription(),
-                deleteDto.getCategory(),
-                deleteDto.getTitle(),
-                deleteDto.getPrice(),
-                deleteDto.getImage()
-        );
+    @DeleteMapping("/products/{productId}")
+    public Product deleteProducts(@PathVariable("productId") Long productId) throws ProductNotFoundException{
+        return productService.deleteProducts(productId);
     }
-    @GetMapping("/products/category/jewelery")
-    public Object getSpecificCategory(){
-        return  productService.getSpecificCategory();
+
+    @GetMapping("/products/category/category")
+    public Object getSpecificCategorys(@PathVariable("category") String category){
+        return  productService.getSpecificCategorys(category);
     }
+   /* @GetMapping("/products/category/{category}")
+    public  List<Product> getProducts(@PathVariable("category") String category){
+        return  productService.getProducts(category);
+    }*/
+
+
 }

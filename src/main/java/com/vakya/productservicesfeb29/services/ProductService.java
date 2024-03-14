@@ -18,11 +18,15 @@ public interface ProductService {
     );
     //Object g
 
-    Product updateProduct(String title, String description, String category, double price, String image) throws URISyntaxException;
+    Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws ProductNotFoundException, URISyntaxException;
 
     Object getAllCategories();
 
-    Product deleteProduct(String title, String description, String category, double price, String image);
+    Product deleteProducts(Long productId) throws  ProductNotFoundException;
 
-    Object getSpecificCategory();
+
+    Object getSpecificCategorys(String category);
+    //List<Product> getProducts(String category);
+
+
 }
