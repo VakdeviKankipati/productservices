@@ -19,7 +19,8 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel {
     private String title;
-    @OneToMany(mappedBy =  "category", cascade = {CascadeType.REMOVE} )
+    //@OneToMany(mappedBy =  "category", cascade = {CascadeType.REMOVE} )
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER, mappedBy = "category", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Product> products;
 }
