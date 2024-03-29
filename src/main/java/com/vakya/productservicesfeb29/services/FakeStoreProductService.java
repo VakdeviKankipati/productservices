@@ -3,9 +3,11 @@ package com.vakya.productservicesfeb29.services;
 import com.vakya.productservicesfeb29.dtos.FakeStoreProductsDto;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -149,6 +151,11 @@ public class FakeStoreProductService implements ProductService{
             throw new ProductNotFoundException("No Product : "+category +" is present");
         }
         return answer;
+    }
+
+    @Override
+    public Page<Product> getProductss(int numberOfProducts, int offset)  {
+        return null;
     }
 
 

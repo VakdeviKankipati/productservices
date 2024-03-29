@@ -1,20 +1,21 @@
 package com.vakya.productservicesfeb29.controllers;
 
-import com.vakya.productservicesfeb29.dtos.CreateProductRequestDto;
-import com.vakya.productservicesfeb29.dtos.DeleteProductDto;
-import com.vakya.productservicesfeb29.dtos.ErrorDto;
-import com.vakya.productservicesfeb29.dtos.UpdateProductRequestDto;
+import com.vakya.productservicesfeb29.dtos.*;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
 import com.vakya.productservicesfeb29.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
+import org.xml.sax.helpers.DefaultHandler;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -25,7 +26,12 @@ public class ProductController {
     public ProductController(@Qualifier("selfProductService") ProductService productService){
         this.productService = productService;
     }
-
+    @GetMapping("/products/pagination")
+    public ResponseEntity<Page<Product>> getProductss(@RequestBody GetProductRequestDto requestDto)  {
+        return ResponseEntity.of(Optional.ofNullable(productService.getProductss(
+                requestDto.getNumberOfResults() , requestDto.getOffset()
+        )));
+    }
     @PostMapping("/products")
     public Product createProduct(@RequestBody CreateProductRequestDto requestDto){
         return productService.createProduct(

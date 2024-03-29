@@ -5,11 +5,18 @@ import com.vakya.productservicesfeb29.models.Category;
 import com.vakya.productservicesfeb29.models.Product;
 import com.vakya.productservicesfeb29.repositories.CategoryRepository;
 import com.vakya.productservicesfeb29.repositories.ProductRepository;
+//import org.hibernate.query.Page;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.net.URISyntaxException;
 import java.util.List;
 @Service("selfProductService")
+//@Primary
 public class SelfProductService implements ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
@@ -97,6 +104,16 @@ public class SelfProductService implements ProductService {
     public List<Product> getProducts(String category) throws ProductNotFoundException {
         Category cat = categoryRepository.findByTitle(category);
         return  productRepository.findByCategory(cat);
+    }
+    public Page<Product> getProductss(int numberOfProducts, int offset) {
+        Page<Product> products = productRepository.findAll(
+                PageRequest.of((offset/numberOfProducts),
+                        numberOfProducts,
+                        Sort.by("price").descending()
+                                .and(Sort.by("title").ascending()
+                        ))
+        );
+        return products;
     }
 
 
