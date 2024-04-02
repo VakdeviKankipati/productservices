@@ -4,6 +4,7 @@ import com.vakya.productservicesfeb29.dtos.FakeStoreProductsDto;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,28 +19,34 @@ import static org.apache.logging.log4j.ThreadContext.isEmpty;
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
 
-
-
-
     private RestTemplate restTemplate;
    // private long id;
+    private RedisTemplate<Long,Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate){
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<Long,Object> redisTemplate){
 
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
     @Override
     public Product getSingleProduct(Long productId) throws ProductNotFoundException {
+        FakeStoreProductsDto fakeStoreProductsDto = (FakeStoreProductsDto) redisTemplate.opsForHash().get(productId,"PRODUCTS");
+
+        if(fakeStoreProductsDto != null){
+            return fakeStoreProductsDto.toProduct();
+        }
+
         ResponseEntity<FakeStoreProductsDto> fakeStoreProductResponse = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreProductsDto.class
                 );
-        FakeStoreProductsDto fakeStoreProduct = fakeStoreProductResponse.getBody();
+        FakeStoreProductsDto productsDto = fakeStoreProductResponse.getBody();
 
-        if (fakeStoreProduct == null) {
+        redisTemplate.opsForHash().put(productId,"PRODUCTS",productsDto);
+        if (productsDto == null) {
             throw new ProductNotFoundException("Product with id: " + productId + " doesn't exist. Retry some other product.");
         }
-        return fakeStoreProduct.toProduct();
+        return productsDto.toProduct();
     }
 
     @Override

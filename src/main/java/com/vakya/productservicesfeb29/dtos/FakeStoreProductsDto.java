@@ -5,9 +5,11 @@ import com.vakya.productservicesfeb29.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class FakeStoreProductsDto {
+public class FakeStoreProductsDto implements Serializable {
     private long id;
     private String title;
     private String image;
