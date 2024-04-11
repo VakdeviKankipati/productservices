@@ -116,10 +116,6 @@ public class FakeStoreProductService implements ProductService{
                 fakeStore
               // FakeStoreProductsDto.class
         );
-      /*  if(response == null){
-            return new Product();
-        }*/
-        //return response.toProduct();
         return fakeStore.toProduct();
     }
 

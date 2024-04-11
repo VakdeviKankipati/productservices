@@ -53,6 +53,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<Product> getAllProducts(){
+
         return productService.getAllProducts();
     }
     @PutMapping("/products/{id}")
