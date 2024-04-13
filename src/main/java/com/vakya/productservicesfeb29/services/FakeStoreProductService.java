@@ -91,6 +91,7 @@ public class FakeStoreProductService implements ProductService{
 
    /* @Override
     public Object getAllProduct() {
+    .///
        Object fake = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
                 Object.class
@@ -115,7 +116,7 @@ public class FakeStoreProductService implements ProductService{
                 uri,
                 fakeStore
               // FakeStoreProductsDto.class
-        );
+        ); 
         return fakeStore.toProduct();
     }
 
