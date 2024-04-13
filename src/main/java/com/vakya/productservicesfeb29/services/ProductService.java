@@ -19,8 +19,7 @@ public interface ProductService {
                             String image
     );
     //Object g
-
-    Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws ProductNotFoundException, URISyntaxException;
+    Product updateProduct(Long productId,Product product) throws ProductNotFoundException;
 
     Object getAllCategories();
 

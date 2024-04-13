@@ -2,6 +2,7 @@ package com.vakya.productservicesfeb29.controllers;
 
 import com.vakya.productservicesfeb29.dtos.*;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
+import com.vakya.productservicesfeb29.models.Category;
 import com.vakya.productservicesfeb29.models.Product;
 import com.vakya.productservicesfeb29.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,15 +58,20 @@ public class ProductController {
         return productService.getAllProducts();
     }
     @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody UpdateProductRequestDto updateDto) throws URISyntaxException, ProductNotFoundException{
-        return productService.updateProduct(productId,
-               // updateDto.getId(),
-                updateDto.getTitle(),
-                updateDto.getDescription(),
-                updateDto.getCategory(),
-                updateDto.getPrice(),
-                updateDto.getImage()
-        );
+    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody UpdateProductRequestDto request) throws ProductNotFoundException{
+        Product product = new Product();
+        product.setDescription(request.getDescription());
+        Category category = new Category();
+        category.setTitle(request.getCategory());
+        product.setImageUrl(request.getImage());
+        if (category.getTitle() != null) {
+            product.setCategory(category);
+        }
+        product.setTitle(request.getTitle());
+        if(request.getPrice()!=0.0){
+            product.setPrice(request.getPrice());
+        }
+        return productService.updateProduct(productId, product);
 
     }
 

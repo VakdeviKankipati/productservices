@@ -88,38 +88,6 @@ public class FakeStoreProductService implements ProductService{
         }
         return response.toProduct();
     }
-
-   /* @Override
-    public Object getAllProduct() {
-    .///
-       Object fake = restTemplate.getForObject(
-                "https://fakestoreapi.com/products",
-                Object.class
-
-        );
-
-       return fake;
-    }*/
-
-    @Override
-    public Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws ProductNotFoundException, URISyntaxException {
-        FakeStoreProductsDto fakeStore = new FakeStoreProductsDto();
-        fakeStore.setId(productId);
-        fakeStore.setTitle(title);
-        fakeStore.setDescription(description);
-        fakeStore.setPrice(price);
-        fakeStore.setImage(image);
-        fakeStore.setCategory(category);
-        URI uri = new URI("https://fakestoreapi.com/products/7");
-       // FakeStoreProductsDto response =
-        restTemplate.put(
-                uri,
-                fakeStore
-              // FakeStoreProductsDto.class
-        ); 
-        return fakeStore.toProduct();
-    }
-
     @Override
     public Object getAllCategories() {
         Object object = restTemplate.getForObject(
@@ -128,6 +96,20 @@ public class FakeStoreProductService implements ProductService{
         );
         return object;
     }
+   @Override
+   public Product updateProduct(Long productId, Product product) throws ProductNotFoundException {
+       Map<String, String> params = new HashMap<String, String>();
+       params.put("id", productId.toString());
+       FakeStoreProductsDto fakeStoreProductDto = new FakeStoreProductsDto();
+       fakeStoreProductDto.setId(productId.longValue());
+       fakeStoreProductDto.setTitle(product.getTitle());
+       fakeStoreProductDto.setPrice(Double.valueOf(product.getPrice()).longValue());
+       fakeStoreProductDto.setCategory(product.getCategory().getTitle());
+       fakeStoreProductDto.setDescription(product.getDescription());
+       fakeStoreProductDto.setImage(product.getImageUrl());
+       restTemplate.put("https://fakestoreapi.com/products/" + product.getId(), fakeStoreProductDto, params);
+       return product;
+   }
 
     @Override
     public Product deleteProducts(Long productId) throws  ProductNotFoundException {

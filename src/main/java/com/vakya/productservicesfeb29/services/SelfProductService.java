@@ -54,28 +54,29 @@ public class SelfProductService implements ProductService {
         return productRepository.save(product);
     }
 
+
     @Override
-    public Product updateProduct(Long productId, String title, String description, String category, double price, String image) throws  ProductNotFoundException, URISyntaxException {
-        Product product = getSingleProduct(productId);
-        if(title !=null) {
-            product.setTitle(title);
+    public Product updateProduct(Long productId, Product product) throws ProductNotFoundException {
+        Product existingProduct = getSingleProduct(productId);
+        if (product.getTitle() != null) {
+            existingProduct.setTitle(product.getTitle());
         }
-        if(description != null){
-            product.setDescription(description);
+        if (product.getImageUrl() != null) {
+            existingProduct.setImageUrl(product.getImageUrl());
         }
-        if(price != 0.0){
-            product.setPrice(price);
+        if (product.getDescription() != null) {
+            existingProduct.setDescription(product.getDescription());
         }
-        if(image != null){
-            product.setImageUrl(image);
+        if (Double.valueOf(product.getPrice()) != 0.0) {
+            existingProduct.setPrice(product.getPrice());
         }
-        if(category != null) {
-            Category cat = new Category();
-            cat.setTitle((product.getCategory().getTitle()));
-            product.setCategory(cat);
+        if (product.getCategory() != null) {
+            Category newCategory = new Category();
+            newCategory.setTitle(product.getCategory().getTitle());
+            existingProduct.setCategory(newCategory);
         }
-        productRepository.save(product);
-        return product;
+        productRepository.save(existingProduct);
+        return existingProduct;
     }
 
     @Override
