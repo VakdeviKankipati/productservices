@@ -98,8 +98,8 @@ public class FakeStoreProductService implements ProductService{
     }
    @Override
    public Product updateProduct(Long productId, Product product) throws ProductNotFoundException {
-       Map<String, String> params = new HashMap<String, String>();
-       params.put("id", productId.toString());
+       Map<String, String> hm = new HashMap<String, String>();
+       hm.put("id", productId.toString());
        FakeStoreProductsDto fakeStoreProductDto = new FakeStoreProductsDto();
        fakeStoreProductDto.setId(productId.longValue());
        fakeStoreProductDto.setTitle(product.getTitle());
@@ -107,7 +107,7 @@ public class FakeStoreProductService implements ProductService{
        fakeStoreProductDto.setCategory(product.getCategory().getTitle());
        fakeStoreProductDto.setDescription(product.getDescription());
        fakeStoreProductDto.setImage(product.getImageUrl());
-       restTemplate.put("https://fakestoreapi.com/products/" + product.getId(), fakeStoreProductDto, params);
+       restTemplate.put("https://fakestoreapi.com/products/" + product.getId(), fakeStoreProductDto, hm);
        return product;
    }
 
