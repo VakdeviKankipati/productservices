@@ -167,14 +167,7 @@ public class FakeStoreProductService implements ProductService{
 
 
 
-   /* @Override
-    public Object getSpecificCategorys(String category) {
-        Object ob = restTemplate.getForObject(
-                "https://fakestoreapi.com/products/category/jewelery",
-                Object.class
-        );
-        return ob;
-    }*/
+
 
 
 
