@@ -1,6 +1,8 @@
 package com.vakya.productservicesfeb29.controllers;
 
+import com.vakya.productservicesfeb29.commons.AuthenticationCommons;
 import com.vakya.productservicesfeb29.dtos.*;
+import com.vakya.productservicesfeb29.exceptions.InvalidTokenException;
 import com.vakya.productservicesfeb29.exceptions.ProductNotFoundException;
 import com.vakya.productservicesfeb29.models.Category;
 import com.vakya.productservicesfeb29.models.Product;
@@ -23,9 +25,13 @@ public class ProductController {
 
     private ProductService productService;
     private RestTemplate restTemplate;
+    private AuthenticationCommons authenticationCommons;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService){
+    public ProductController(@Qualifier("selfProductService") ProductService productService,
+                             RestTemplate restTemplate, AuthenticationCommons authenticationCommons){
         this.productService = productService;
+        this.restTemplate=restTemplate;
+        this.authenticationCommons=authenticationCommons;
     }
     @GetMapping("/products/pagination")
     public ResponseEntity<Page<Product>> getProductss(@RequestBody GetProductRequestDto requestDto)  {
@@ -45,8 +51,14 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/{id}")
-    public Product getProductDetails(@PathVariable("id") Long productsId) throws ProductNotFoundException {
+    @GetMapping("/products/{id}/{token}")
+    public Product getProductDetails(@PathVariable("id") Long productsId, @PathVariable("token") String token) throws ProductNotFoundException, InvalidTokenException {
+        UserDto userDto = authenticationCommons.validateToken(token);
+        if(userDto==null){
+            throw new InvalidTokenException("token not found");
+        }
+
+
 
         return productService.getSingleProduct(productsId);
     }
