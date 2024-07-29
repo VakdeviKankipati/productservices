@@ -53,10 +53,12 @@ public class ProductController {
 
     @GetMapping("/products/{id}/{token}")
     public Product getProductDetails(@PathVariable("id") Long productsId, @PathVariable("token") String token) throws ProductNotFoundException, InvalidTokenException {
-        UserDto userDto = authenticationCommons.validateToken(token);
+        /*UserDto userDto = authenticationCommons.validateToken(token);
         if(userDto==null){
             throw new InvalidTokenException("token not found");
-        }
+        }*/
+        UserDto userDto =
+                restTemplate.getForObject("http://userservice/users/1", UserDto.class);
 
 
 
