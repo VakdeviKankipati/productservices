@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  productservice:
+    image: "vakdevi/productservice:v0.01"
+    container_name: "productservice"
+    restart: "unless-stopped"
+    ports:
+      # external:internal
+      # host port : conainer port
+      - "9000:8085"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3307/productservicedb?createDatabaseIfNotExist=true"
+      SPRING_DATASOURCE_USERNAME: "admin"
+      SPRING_DATASOURCE_PASSWORD: "password"
+
+  mysqldb:
+    image: "mysql:5.7"
+    container_name: "mysqldb"
+    restart: unless-stopped
+    ports:
+      # external:internal
+      # host port : conainer port
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "productservicedb"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "password"
+    volumes:
+      - ./data:/var/lib/mysql:Z

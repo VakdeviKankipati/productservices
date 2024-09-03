@@ -13,26 +13,12 @@ import java.util.Optional;
 
 @SpringBootTest
 class Productservicesfeb29ApplicationTests {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+
     @Test
     void contextLoads() {
     }
 
-    @Test
-    void testingQueries(){
-        //productRepository.findAllByTitle("Hello vakya");
-        Optional<Category> optionalCategory = categoryRepository.findById(1L);
-        Category category = optionalCategory.get();
-        System.out.println("Fetch the category object ");
-        ///
-        ///
-        //List<Product> productList = category.getProducts();
-        System.out.println("Fetched the list of products from category object");
 
-    }
 
 
 }

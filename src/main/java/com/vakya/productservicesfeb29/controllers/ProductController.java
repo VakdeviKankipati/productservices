@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
-import org.xml.sax.helpers.DefaultHandler;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -27,7 +25,7 @@ public class ProductController {
     private RestTemplate restTemplate;
     private AuthenticationCommons authenticationCommons;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService,
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService,
                              RestTemplate restTemplate, AuthenticationCommons authenticationCommons){
         this.productService = productService;
         this.restTemplate=restTemplate;
